@@ -1,0 +1,7 @@
+#--------------------------------------------------
+# Modman file for the Respond-Theme http://respondtheme.com/ (Magento Theme)
+#--------------------------------------------------
+
+#symlinking with modman
+app/design/frontend/default/respond/ app/design/frontend/default/respond/
+skin/frontend/default/respond/ skin/frontend/default/respond/

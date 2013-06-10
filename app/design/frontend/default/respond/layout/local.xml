@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Respond
+ * http://respondtheme.com
+ *
+ * Copyright 2012, Nourdine Ben Chakroun
+ * http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+-->
+<layout>
+
+<!-- 
+	## Default Layout ##
+-->
+
+	<default>
+		
+		<!-- Remove blocks globally -->
+		<remove name="top.links"/>
+		        
+		<!-- Remove callouts globally -->
+        <remove name="right.permanent.callout" />
+        <remove name="left.permanent.callout" />
+        <remove name="paypal.partner.right.logo" />
+
+<!-- 
+	Default Head 
+-->
+
+		<reference name="head">
+
+			<!-- Link to external JavaScript file (e.g Jquery CDN)
+			
+			<block type="core/text" name="google.cdn.jquery">
+            	<action method="setText">
+                	<text><![CDATA[<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+					<script type="text/javascript">var $j = jQuery.noConflict();</script>]]>
+                	</text>
+            	</action>
+        	</block> 
+			
+			-->
+			
+			
+			<!-- Remove print.css and styles-ie.css, styles are now all in styles.css to reduce http request -->
+			<action method="removeItem"><type>skin_css</type><name>css/print.css</name></action>
+			<action method="removeItem"><type>skin_css</type><name>css/styles-ie.css</name><params/></action>
+			
+
+			<!-- <action method="addItem"><type>skin_js</type><name>js/jquery.mobile-1.1.0.min.js</name></action> -->
+			<action method="addItem"><type>skin_js</type><name>js/jquery-1.7.2.min.js</name></action>
+			<action method="addItem"><type>skin_js</type><name>js/respond.min.js</name></action>
+			<action method="addItem"><type>skin_js</type><name>js/select-menu.js</name></action>
+
+			
+		</reference>
+
+<!-- 
+	Default Header 
+-->
+
+		<reference name="header">
+		
+			<block type="page/template_links" name="top.links.custom" as="topLinksCustom">
+				<!--
+				<block type="wishlist/links" name="wishlist_link"/>
+				<action method="addLinkBlock"><blockName>wishlist_link</blockName></action>
+				-->
+				<block type="checkout/links" name="checkout_cart_link">
+					<action method="addCartLink"></action>
+					<!--
+					<action method="addCheckoutLink"></action>
+					-->
+				</block>
+				<action method="addLink" translate="label title" module="customer"><label>My Account</label><url helper="customer/getAccountUrl"/><title>My Account</title><prepare/><urlParams/><position>10</position></action>
+			</block>
+			
+			<block type="directory/currency" name="top_currency" template="directory/currency.phtml"/>
+			<block type="core/template" name="top.search" as="topSearch" template="catalogsearch/form.mini.phtml"/>
+			
+			<reference name="top.bar">
+				<action method="unsetChild"><alias>topSearch</alias></action>
+			</reference>
+
+		</reference>
+
+<!-- 
+	Default Left Column 
+-->
+
+		<reference name="left">
+			<action method="unsetChild"><alias>currency</alias></action>        
+			<block type="catalog/product_compare_sidebar" before="cart_sidebar" name="catalog.compare.sidebar" template="catalog/product/compare/sidebar.phtml"/>
+		</reference>
+
+<!-- 
+	Default Right Column 
+-->
+
+		<reference name="right">
+			<action method="unsetChild"><alias>currency</alias></action>
+		</reference>
+
+<!-- 
+	Default Footer 
+-->
+
+		<reference name="footer">
+			<action method="unsetChild"><alias>cms_footer_links</alias></action>
+			<action method="unsetChild"><alias>footer_links</alias></action>
+			<block type="cms/block" name="footer_block">
+					<action method="setBlockId"><block_id>footer_block</block_id></action>
+			</block>
+			<block type="directory/currency" name="currency_footer" as="currency_footer" template="directory/currency.phtml"/>
+			<block type="page/switch" name="store_language_footer" as="store_language_footer" template="page/switch/languages.phtml"/>
+		</reference>
+
+
+	</default>
+	
+	
+<!--
+Category default layout
+-->
+
+    <catalog_category_default translate="label">
+        <reference name="root">
+            <action method="setTemplate"><template>page/2columns-left.phtml</template></action>
+        </reference>
+        <reference name="left">
+            <action method="unsetChild"><alias>currency</alias></action>        
+		</reference>
+    </catalog_category_default>
+
+<!--
+Category layered navigation layout
+-->
+
+    <catalog_category_layered translate="label">
+        <reference name="root">
+            <action method="setTemplate"><template>page/2columns-left.phtml</template></action>
+        </reference>
+        <reference name="left">
+            <action method="unsetChild"><alias>currency</alias></action>        
+		</reference>
+    </catalog_category_layered>
+
+    <catalog_category_layered_nochildren translate="label">
+        <remove name="right.reports.product.viewed"/>
+        <reference name="left">
+            <!--block type="reports/product_viewed" name="left.reports.product.viewed" template="reports/product_viewed.phtml"/-->
+        </reference>
+    </catalog_category_layered_nochildren>
+	
+<!--
+	Product view
+-->
+
+	 <catalog_product_view>
+		<reference name="root">
+			<action method="setTemplate"><template>page/1column.phtml</template></action>
+		</reference>
+		<reference name="head">
+			<action method="addItem"><type>skin_js</type><name>js/galleria-1.2.7.min.js</name></action>
+			<action method="addItem"><type>skin_js</type><name>js/galleria.classic.min.js</name></action>
+			<action method="addItem"><type>skin_css</type><name>css/galleria.classic.css</name></action>
+		</reference>
+		<reference name="product.info">
+			<action method="unsetChild">
+				<name>info_tabs</name>
+			</action>
+			<block type="catalog/product_view_tabs" name="product.info.tabs" as="info_tabs" template="catalog/product/view/tabs.phtml" >
+				<action method="addTab" translate="title" module="catalog">
+					<alias>description</alias>
+					<title>Details</title>
+					<block>catalog/product_view_description</block>
+					<template>catalog/product/view/description.phtml</template>
+				</action>				
+				<action method="addTab" translate="title" module="catalog">
+					<alias>upsell_products</alias>
+					<title>You may also like</title>
+					<block>catalog/product_list_upsell</block>
+					<template>catalog/product/list/upsell.phtml</template>
+				</action>
+				<action method="addTab" translate="title" module="catalog">
+					<alias>additional</alias>
+					<title>Additional Information</title>
+					<block>catalog/product_view_attributes</block>
+					<template>catalog/product/view/attributes.phtml</template>
+				</action>
+				<action method="addTab" translate="title" module="tag">
+					<alias>product.tags</alias>
+					<title>Product Tags</title>
+					<block>tag/product_list</block>
+					<template>tag/list.phtml</template>
+				</action>
+				<!-- neat trick to include a CMS Static block directly in the tab -->
+				<action method="addTab" translate="title" module="catalog">
+					<alias>shipping</alias>
+					<title>Shipping Costs</title>
+					<block>cms/block</block>
+					<template>null</template>
+				</action>
+				<!-- define the CMS block ID for the shipping info tab -->
+				<block type="cms/block" name="product.info.tabs.shipping" as="shipping">
+					<action method="setBlockId"><block_id>tab-product-shipping</block_id></action>
+				</block>
+			</block>
+		</reference>
+		<reference name="upsell_products">
+            <action method="setColumnCount"><columns>5</columns></action>
+            <action method="setItemLimit"><type>upsell</type><limit>5</limit></action>
+        </reference>
+        <reference name="left">
+            <block type="catalog/product_list_related" name="catalog.product.related" before="-" template="catalog/product/list/related.phtml"/>
+        </reference>
+	 </catalog_product_view>	
+	 
+<!-- 
+	CMS Homepage 
+-->
+	
+	<cms_index_index>
+		<reference name="head">
+			<action method="addItem"><type>skin_js</type><name>js/jquery.flexslider.js</name></action>
+		</reference>
+    </cms_index_index>
+	
+	
+<!--
+	Catalog Search layout
+-->
+
+    <catalogsearch_advanced_index>
+        <reference name="left">
+            <action method="unsetChild"><alias>right_currency</alias></action>  
+        </reference>
+    </catalogsearch_advanced_index>
+
+    <catalogsearch_result_index>
+        <reference name="left">
+            <action method="unsetChild"><alias>currency</alias></action>   
+        </reference>
+    </catalogsearch_result_index>
+
+    <catalogsearch_advanced_result>
+        <reference name="right">
+            <action method="unsetChild"><alias>right_currency</alias></action>   
+        </reference>
+    </catalogsearch_advanced_result>
+	
+<!--
+	Product reviews page
+-->
+
+    <reviews>
+			<reference name="head">
+			<action method="addItem"><type>skin_js</type><name>js/galleria-1.2.7.min.js</name></action>
+			<action method="addItem"><type>skin_js</type><name>js/galleria.classic.min.js</name></action>
+			<action method="addItem"><type>skin_css</type><name>css/galleria.classic.css</name></action>
+		</reference>
+    </reviews>
+	
+	
+   <review_product_list translate="label">
+   		<reference name="head">
+			<action method="addItem"><type>skin_js</type><name>js/galleria-1.2.7.min.js</name></action>
+			<action method="addItem"><type>skin_js</type><name>js/galleria.classic.min.js</name></action>
+			<action method="addItem"><type>skin_css</type><name>css/galleria.classic.css</name></action>
+		</reference>
+    </review_product_list>
+	
+<!--
+	Load this update on every page when customer is logged in
+-->
+
+    <customer_logged_in>
+        <reference name="top.links.custom">
+            <action method="addLink" translate="label title" module="customer"><label>Log Out</label><url helper="customer/getLogoutUrl"/><title>Log Out</title><prepare/><urlParams/><position>100</position></action>
+        </reference>
+    </customer_logged_in>
+
+<!--
+	Load this update on every page when customer is logged out
+-->
+
+    <customer_logged_out>
+
+    </customer_logged_out>
+
+	
+</layout>
